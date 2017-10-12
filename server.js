@@ -20,6 +20,9 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
+var api = require('./app/routes/api')(app,express);
+app.use('/api',api);
+
 
 app.get('/hello', function(req, res) {
     console.log(__dirname);
