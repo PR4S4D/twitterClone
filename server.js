@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var config = require('./config');
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 
 mongoose.connect(config.database, function(error) {
     if (error) {
@@ -24,8 +25,7 @@ var api = require('./app/routes/api')(app,express);
 app.use('/api',api);
 
 
-app.get('/hello', function(req, res) {
-    console.log(__dirname);
+app.get('*', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 

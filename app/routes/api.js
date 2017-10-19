@@ -9,8 +9,8 @@ module.exports = function(app,express) {
 	
 	var api = express.Router();
 
-	api.post('/signup', function(req,res){
-		console.log(rootDirectory);
+	api.post('/signup', function(req,res){ //post api
+		console.log(req.body.name);
 		var user = new User({
 			name : req.body.name,
 			username : req.body.username,
@@ -19,6 +19,7 @@ module.exports = function(app,express) {
 
 		user.save(function(error){
 			if(error){
+				console.log(error);	
 				res.send(error);
 				return;
 			}
@@ -27,6 +28,17 @@ module.exports = function(app,express) {
 		});
 	});
 
+	api.get('/users', function(req,res){
+		User.find({},function(error,users) {
+			if(error){
+				res.send(error);
+				return;
+			}
+
+			res.json(users);
+		});
+	});
+
 	return api;
 
-};
+}
