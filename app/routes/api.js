@@ -80,7 +80,32 @@ module.exports = function(app,express) {
                     });
                 }
             }
-        });
+        });  
+    });
+
+//https://stackoverflow.com/questions/11321635/nodejs-express-what-is-app-use
+    api.use(function(req,res,next){
+        console.log("Someone visited the webiste!");
+        var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+        // check if token exists
+        if(token){
+            jsonwebtoken.verify(token,secretKey,function(error, decoded){
+
+                if(error){
+                    res.status(403).send({success : false, message : "Failed to authenticate user"});
+                }else{
+                    req.decoded = decoded;
+                }
+
+                next();
+            });
+        }else{
+            res.status(403).send({success : false, message : "No token provided!"});
+        }
+    });
+
+    app.get('/', function(req,res){
+        res.json("Hello world!");
     });
 
 	return api;
