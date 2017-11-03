@@ -1,5 +1,6 @@
 var rootDirectory = process.env.PWD;
-var User = require( '../models/user');
+var User = require('../models/user');
+var Tweet = require('../models/tweet');
 
 var config = require('../../config');
 
@@ -9,7 +10,7 @@ var jsonwebtoken = require('jsonwebtoken');
 
 function createToken(user) {
     var token = jsonwebtoken.sign({
-        _id: user._id,
+        id: user._id,
         name: user.name,
         username: user.username
     }, secretKey, {
@@ -19,39 +20,41 @@ function createToken(user) {
     return token;
 }
 
-module.exports = function(app,express) {
-	
-	var api = express.Router();
+module.exports = function(app, express) {
 
-	api.post('/signup', function(req,res){ //post api
-		console.log(req.body.name);
-		var user = new User({
-			name : req.body.name,
-			username : req.body.username,
-			password : req.body.password
-		});
+    var api = express.Router();
 
-		user.save(function(error){
-			if(error){
-				console.log(error);	
-				res.send(error);
-				return;
-			}
+    api.post('/signup', function(req, res) { //post api
+        console.log(req.body.name);
+        var user = new User({
+            name: req.body.name,
+            username: req.body.username,
+            password: req.body.password
+        });
 
-			res.json({message : "User has been created!"});
-		});
-	});
+        user.save(function(error) {
+            if (error) {
+                console.log(error);
+                res.send(error);
+                return;
+            }
 
-	api.get('/users', function(req,res){
-		User.find({},function(error,users) {
-			if(error){
-				res.send(error);
-				return;
-			}
+            res.json({
+                message: "User has been created!"
+            });
+        });
+    });
 
-			res.json(users);
-		});
-	});
+    api.get('/users', function(req, res) {
+        User.find({}, function(error, users) {
+            if (error) {
+                res.send(error);
+                return;
+            }
+
+            res.json(users);
+        });
+    });
 
     api.post('/login', function(req, res) {
         User.findOne({
@@ -80,34 +83,70 @@ module.exports = function(app,express) {
                     });
                 }
             }
-        });  
+        });
     });
 
-//https://stackoverflow.com/questions/11321635/nodejs-express-what-is-app-use
-    api.use(function(req,res,next){
+    //https://stackoverflow.com/questions/11321635/nodejs-express-what-is-app-use
+    api.use(function(req, res, next) {
         console.log("Someone visited the webiste!");
         var token = req.body.token || req.param('token') || req.headers['x-access-token'];
         // check if token exists
-        if(token){
-            jsonwebtoken.verify(token,secretKey,function(error, decoded){
+        if (token) {
+            jsonwebtoken.verify(token, secretKey, function(error, decoded) {
 
-                if(error){
-                    res.status(403).send({success : false, message : "Failed to authenticate user"});
-                }else{
+                if (error) {
+                    res.status(403).send({
+                        success: false,
+                        message: "Failed to authenticate user"
+                    });
+                } else {
                     req.decoded = decoded;
                 }
 
                 next();
             });
-        }else{
-            res.status(403).send({success : false, message : "No token provided!"});
+        } else {
+            res.status(403).send({
+                success: false,
+                message: "No token provided!"
+            });
         }
     });
 
-    app.get('/', function(req,res){
-        res.json("Hello world!");
-    });
+    api.route('/')
+        .post(function(req, res) {
+            console.log('Decoded Request :' + req.decoded);
+            var tweet = new Tweet({
+                tweeter: req.decoded.id,
+                tweet: req.body.tweet,
+            });
 
-	return api;
+            tweet.save(function(error) {
+                if (error) {
 
+                    res.send(error);
+                    return;
+                }
+
+                res.json({
+                    message: "New tweet created"
+                });
+
+            })
+
+        })
+        .get(function(req, res) {
+            Tweet.find({
+                tweeter: req.decoded.id
+            }, function(error, tweets) {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+
+                res.json(tweets);
+            })
+        })
+
+    return api;
 }
