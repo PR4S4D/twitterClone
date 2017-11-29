@@ -1,8 +1,8 @@
-angular.module('authService', [])
+    angular.module('authService', [])
 
 
 .factory('Auth', function function_name($http, $q, AuthToken) {
-    var authFactory = ();
+    var authFactory = {};
     authFactory.login = function(username, password) {
         return $http.post('/api/login', {
                 username: username,

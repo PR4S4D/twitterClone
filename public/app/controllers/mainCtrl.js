@@ -25,8 +25,8 @@ angular.module('mainCtrl', [])
                         vm.user = data.data;
                     });
 
-                $(data.success){
-                    $location.path('/')
+                if($(data.success)){
+                    $location.path('/');
                 }
             });
     }
