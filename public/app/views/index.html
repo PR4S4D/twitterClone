@@ -7,12 +7,34 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-route.min.js"></script>
 	<script type="text/javascript" src="app/services/authService.js"></script>
+	<script type="text/javascript" src="app/services/userService.js"></script>
 	<script type="text/javascript" src="app/controllers/mainCtrl.js"></script>
+	<script type="text/javascript" src="app/controllers/userCtrl.js"></script>
 	<script type="text/javascript" src="app/app.routes.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
+	<script type="text/javascript" src="app/app.js"></script>
 	<base href="/" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
-<body>
+<body ng-controller="MainController as main">
+	<header>
+		<div class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header"><a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book"></span>Twitter</a></div>
+
+				<ul class="nav navbar-nav">
+					<li><a href="/users"></a></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li ng-if="!main.loggedIn"><a href="/login">Login</a></li>
+					<li ng-if="!main.loggedIn"><a href="/signup">Signup</a></li>
+					<li ng-if="main.loggedIn"><a href="#">Hello {{main.user.username}}</a></li>
+					<li ng-if="main.loggedIn"><a href="#" ng-click="="main.dologout()">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</header>
 
 	<main class="container">
 		<div ng-view></div>
