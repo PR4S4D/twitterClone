@@ -12,7 +12,7 @@ angular.module('mainCtrl', [])
             });
     });
 
-    vm.doLogin = function(){
+    vm.doLogin = function(){     
 
         vm.processing = true;
         vm.error = '';
@@ -28,8 +28,8 @@ angular.module('mainCtrl', [])
                 if($(data.success)){
                     $location.path('/');
                 }
-            });
-    };
+            })
+    }
 
     vm.doLogout = function(){
         Auth.logout();
