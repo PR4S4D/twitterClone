@@ -1,5 +1,4 @@
-
-angular.module('userCtrl', [])
+angular.module('userCtrl', ['userService'])
 
 .controller('UserController', function(User) {
 
@@ -9,7 +8,7 @@ angular.module('userCtrl', [])
 	User.all()
 		.success(function(data) {
 			vm.users = data;
-		})	
+		});	
 
 
 
@@ -28,7 +27,7 @@ angular.module('userCtrl', [])
 
 				$window.localStorage.setItem('token', response.data.token);
 				$location.path('/')
-			})
-	}
+			});
+	};
 
 })

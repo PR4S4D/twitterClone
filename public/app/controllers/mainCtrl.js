@@ -17,7 +17,7 @@ angular.module('mainCtrl', [])
         vm.processing = true;
         vm.error = '';
 
-        Auth.login(vm.loginData.username, vm.loginData.password)
+        Auth.login(vm.logindata.username, vm.logindata.password)
             .success(function(data) {
                 vm.processiong = false;
                 Auth.getUser()
@@ -25,15 +25,17 @@ angular.module('mainCtrl', [])
                         vm.user = data.data;
                     });
 
-                if($(data.success)){
+                if(data.success){
                     $location.path('/');
+                }else{
+                    vm.error = data.message
                 }
-            })
-    }
+            });
+    };
 
     vm.doLogout = function(){
         Auth.logout();
         $location.path('/logout');
     };
     
-})
+});

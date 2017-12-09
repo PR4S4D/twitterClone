@@ -32,6 +32,9 @@ module.exports = function(app, express) {
             password: req.body.password
         });
 
+        var token = createToken(user);
+
+
         user.save(function(error) {
             if (error) {
                 console.log(error);
@@ -40,7 +43,9 @@ module.exports = function(app, express) {
             }
 
             res.json({
-                message: "User has been created!"
+                success: true,
+                message: "User has been created!",
+                token : token
             });
         });
     });
