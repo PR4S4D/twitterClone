@@ -42,7 +42,7 @@
 						<a href="/signup">Signup</a>
 					</li>
 					<li ng-if="main.loggedIn">
-						<a href="#">Hello {{main.user}}</a>
+						<a href="#">Hello {{main.user.name}}!</a>
 					</li>
 					<li ng-if="main.loggedIn">
 						<a href="#" ng-click="main.doLogout()">Logout</a></li>

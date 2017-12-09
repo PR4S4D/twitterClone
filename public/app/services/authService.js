@@ -32,7 +32,7 @@
     	}else{
     		return $q.reject({ message : "User has no token"});
     	}
-    }
+    };
 
     return authFactory;
 })
@@ -45,6 +45,7 @@
     }
 
     authTokenFactory.setToken = function(token) {
+        console.log('token'+token)
         if(token){
             $window.localStorage.setItem('token', token);
         }else{

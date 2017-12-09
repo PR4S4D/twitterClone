@@ -1,6 +1,7 @@
 <div class="container" ng-controller="UserCreateController  as user">
 	<div class="row">
 		<div class="col-sm-6 col-md-4 col md-offset-4">
+			<h1>Sign up</h1>
 			<form class="form-login" method="post" ng-submit="user.signupUser()">
 				Name : <input type="text" class="form-control" name="name" ng-model="user.userdata.name">
 				Username : <input type="text" class="form-control" name="username" ng-model="user.userdata.username">
